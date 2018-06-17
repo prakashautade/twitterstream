@@ -14,6 +14,7 @@ class StreamConsumer(StreamListener):
         self.tweetsConsumed = self.tweetsConsumed + 1
         if(self.tweetsConsumed <= self.tweetsRequested):
             self.tweets.append(data)
+            print("Twits collected: %d" % (len(self.tweets)))
             return True
         else:
             json.dump(self.tweets, self.tweetsFile)
@@ -24,9 +25,10 @@ class StreamConsumer(StreamListener):
         print(status)
 
     def setupTweetLocation(self):
-        if not os.path.exists(os.path.dirname(self.tweetsLocation)):
+        dirName = os.path.dirname(self.tweetsLocation)
+        if dirName and not os.path.exists(dirName):
             try:
-                os.makedirs(os.path.dirname(self.tweetsLocation))
+                os.makedirs(dirName)
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
